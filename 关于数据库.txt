@@ -1,0 +1,4 @@
+
+1.登录sql创建名为 news 的数据库
+
+2.导入news.sql文件，然后会得到user和comment这两张表

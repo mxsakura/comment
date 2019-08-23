@@ -1,0 +1,48 @@
+* {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#ul1 li {
+    width: 100%;
+    margin: 30px 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+#ul1 li p {
+    margin: 0 !important;
+}
+
+#ul1 li .username {
+    height: 20px;
+    line-height: 20px;
+    font-size: 20px;
+    color: #6d757a;
+}
+
+#ul1 li .content {
+    height: 60px;
+    line-height: 60px;
+    font-size: 20px;
+    text-indent: 2em;
+}
+
+#ul1 li .footer {
+    height: 30px;
+    line-height: 30px;
+    color: #99a2aa;
+}
+
+#ul1 li .con {
+    float: right;
+    margin-right: 50px;
+}
+
+#ul1 li .con span {
+    margin: 0 20px;
+}
+
+.text {
+    resize: none;
+}

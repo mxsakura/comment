@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>评论</title>
+  <script src="js/ajax.js"></script>
+  <script src="js/datetime.js"></script>
+  <link rel="stylesheet" href="css/comment.css" />
+  <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css" />
+</head>
+
+<body>
+  <div class="wrap container">
+    <div class="comment row">
+      <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">评论信息</div>
+          <div class="panel-body">
+            <form action="#">
+              <div class="form-group">
+                <span style="font-size: 20px;" id="oU"></span>
+                <input type="button" class="btn btn-success pull-right" value="退出" onclick="exit()" />
+              </div>
+              <div class=" form-group">
+                <textarea rows="10" class="form-control text" id="oT"></textarea>
+              </div>
+              <span id="prompt" style="color: red;font-size: 20px;"></span>
+              <input class="btn btn-success pull-right" type="button" id="btn" value="评论" />
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row"></div>
+    <div class="commentlist row">
+      <ul id="ul1" class="col-md-12"></ul>
+    </div>
+  </div>
+</body>
+<script>
+  var oU = document.getElementById("oU");
+  var oT = document.getElementById("oT");
+  var oBtn = document.getElementById("btn");
+  var oUl = document.getElementById("ul1");
+  var oPrompt = document.getElementById("prompt");
+
+  //渲染列表的算法
+  function Rendering(newData) {
+    var html = "";
+    for (var i = 0; i < newData.length - 1; i++) {
+      html += "<li><p class='username'>" + newData[i].username +
+        "</p><p class='content'>" + newData[i].content +
+        "</p><div class='footer'><div class='con'><a href='#' onclick= oDeleteBtn(" + newData[i].cid +
+        ")>删除</a><span>[" +
+        newData[i].time + "]</span></div></div></li>";
+    }
+    oUl.innerHTML = html;
+  }
+
+  window.onload = function () {
+    //渲染列表
+    ajax({
+      method: "get",
+      url: "php/comment.php",
+      data: "&comment=",
+      success: function (data) {
+        var newData = JSON.parse(data);
+        if (data != 0) {
+          oU.innerHTML = newData[newData.length - 1];
+          Rendering(newData);
+        }
+      }
+    });
+  };
+
+  //评论
+  oBtn.onclick = function () {
+    if (oT.value != "" && oU.value != "") {
+      ajax({
+        method: "get",
+        url: "php/comment.php",
+        data: "username=" +
+          oU.innerHTML +
+          "&content=" +
+          oT.value +
+          "&datetime=" +
+          datetime() +
+          "&insert=",
+        success: function (data) {
+          var newData = JSON.parse(data);
+          Rendering(newData);
+          oT.value = "";
+          oPrompt.innerHTML = "";
+        }
+      });
+    } else {
+      oPrompt.innerHTML = "必须填写内容";
+    }
+  };
+
+  //删除
+  function oDeleteBtn(index) {
+    ajax({
+      method: "get",
+      url: "php/comment.php",
+      data: "&cid=" +
+        index +
+        "&delete=",
+      success: function (data) {
+        if (data != 0) {
+          var newData = JSON.parse(data);
+          Rendering(newData);
+        } else {
+          Rendering([]);
+        }
+      }
+    });
+  }
+  //退出
+  function exit() {
+    if (confirm("确定退出吗")) {
+      ajax({
+        method: "get",
+        url: "php/comment.php",
+        data: "&exit=",
+        success: function (data) {
+          window.location.href = "index.html"
+        }
+      });
+    }
+  }
+</script>
+
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>登录</title>
+  <script src="js/ajax.js"></script>
+  <script src="js/datetime.js"></script>
+  <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css" />
+</head>
+
+<body>
+  <div class="wrap container">
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        <div class="panel panel-default">
+          <div class="panel-heading">用户登录</div>
+          <div class="panel-body text-center">
+            <form action="#">
+              <div class="form-group">
+                <input class="form-control" type="text" id="oU" placeholder="用户名" />
+              </div>
+              <div class="form-group">
+                <input type="password" class="form-control" id="oT" placeholder="密码"></textarea>
+              </div>
+              <span id="prompt" style="color: red;font-size: 20px;"></span>
+              <input class="btn btn-success pull-left" type="button" id="btn" value="登录" />
+              <input class="btn btn-success pull-right" type="button" id="btn2" value="注册" />
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row"></div>
+    <div class="commentlist row">
+      <ul id="ul1" class="col-md-12"></ul>
+    </div>
+  </div>
+</body>
+<script>
+  //login的变量
+  var oU = document.getElementById("oU");
+  var oT = document.getElementById("oT");
+  var oBtn = document.getElementById("btn");
+  var oBtn2 = document.getElementById("btn2");
+  var oPrompt = document.getElementById("prompt");
+
+
+  //登录
+  oBtn.onclick = function () {
+    if (oT.value != "" && oU.value != "") {
+      ajax({
+        method: "get",
+        url: "php/comment.php",
+        data: "username=" +
+          oU.value +
+          "&password=" +
+          oT.value +
+          "&usertime=" +
+          datetime() +
+          "&login=" +
+          btn.value,
+        success: function (data) {
+          if (data == "1") {
+            oPrompt.innerHTML = '登录成功';
+            oU.value = '';
+            oT.value = '';
+            window.location.href = 'index_comment.html';
+          } else {
+            oPrompt.innerHTML = '用户名或密码错误';
+          }
+        }
+      });
+    } else {
+      oPrompt.innerHTML = "必须填写内容和用户名";
+    }
+  };
+  //注册
+  oBtn2.onclick = function () {
+    if (oT.value != "" && oU.value != "") {
+      ajax({
+        method: "get",
+        url: "php/comment.php",
+        data: "username=" +
+          oU.value +
+          "&password=" +
+          oT.value +
+          "&usertime=" +
+          datetime() +
+          "&register=" +
+          btn2.value,
+        success: function (data) {
+          if (data != "0") {
+            oPrompt.innerHTML = '注册成功';
+            oU.value = '';
+            oT.value = '';
+          } else {
+            oPrompt.innerHTML = "该用户已经被注册了";
+          }
+        }
+      });
+    } else {
+      oPrompt.innerHTML = "必须填写用户名和密码";
+    }
+  };
+</script>
+
+</html>
